@@ -1,0 +1,61 @@
+<apex:page Controller="XappiaController">
+    <apex:stylesheet value="{!URLFOR( $Resource.jQueryUI, 'jquery-ui-1.12.1.custom/jquery-ui.css' )}"/>
+    <apex:stylesheet value="{!$Resource.xappiaCSS}"/>
+    
+    <apex:includeScript value="{!$Resource.jQuery}"/>
+    <apex:includeScript value="{!URLFOR( $Resource.jQueryUI, 'jquery-ui-1.12.1.custom/jquery-ui.js' )}"/>
+    <apex:includeScript value="{!$Resource.sortable}"/>
+    
+<apex:form >
+<apex:pageBlock title="Niveles" mode="edit">
+    
+    <div id="nivel1">
+        <h3>Nivel1 - Customer - Direct</h3>
+        <ul id="sort1" class="connectedSortable">
+            <apex:repeat value="{!accounts1}" var="acct">
+                <li id="{!acct.Id}" class="ui-state-default">{!acct.Name}</li>
+            </apex:repeat>
+        </ul>
+    </div>
+        
+    <div id="nivel2">
+        <h3>Nivel2 - Customer - Channel</h3>
+        <ul id="sort2" class="connectedSortable">
+            <apex:repeat value="{!accounts2}" var="acct">
+                <li id="{!acct.Id}" class="ui-state-highlight">{!acct.Name}</li>
+            </apex:repeat>
+        </ul>
+    </div>
+        
+    <div id="nivel3">
+        <h3>Nivel3 - Other</h3>
+        <ul id="sort3" class="connectedSortable">
+            <apex:repeat value="{!accounts3}" var="acct">
+                <li id="{!acct.Id}" class="ui-state-error">{!acct.Name}</li>
+            </apex:repeat>
+        </ul>
+    </div>
+    
+    <apex:pageBlockSection >
+        <apex:inputHidden id="keys" value="{!keys}"/>
+        <apex:inputHidden id="values" value="{!values}"/>
+    </apex:pageBlockSection>
+    
+    <apex:pageBlockButtons >
+        <apex:commandButton onclick="guardar()" action="{! save }" value="Guardar" />        
+    </apex:pageBlockButtons>
+    
+
+
+</apex:pageBlock>
+</apex:form>
+    
+    <script>
+        function guardar() {
+            //console.log(Object.keys(map));
+            //console.log("Values: " + Object.values(map));
+            $("[id*='keys']").val(Object.keys(map));
+            $("[id*='values']").val(Object.values(map));
+        }
+    </script>
+</apex:page>

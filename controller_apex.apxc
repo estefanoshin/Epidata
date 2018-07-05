@@ -1,0 +1,67 @@
+public class XappiaController {
+    
+    public static final String nivel1 = 'Customer - Direct';
+    public static final String nivel2 = 'Customer - Channel';
+    public static final String nivel3 = 'Other';
+  
+    public String keys { get; set; }
+    public String values { get; set; }
+    
+    public List<Account> getAccounts1 () {
+        List<Account> result = [SELECT Type, Id, Name FROM Account WHERE Type = :nivel1];
+        return result;
+    }
+    
+    public List<Account> getAccounts2 () {
+        List<Account> result = [SELECT Type, Id, Name FROM Account WHERE Type = :nivel2];
+        return result;
+    }
+    
+    public List<Account> getAccounts3 () {
+        List<Account> result = [SELECT Type, Id, Name FROM Account WHERE Type = :nivel3];
+        return result;
+    }
+
+    public PageReference save() {
+        
+        if ( keys != null && values != null){
+            updateTypes(keys, values);
+        }
+        
+        return null;
+    }
+    
+    public void updateTypes (String IdString, String types) {
+        List<Account> acct = new List<Account>();
+        List<String> accountList = parseToList(IdString);
+        List<String> acctTypes = parseToList(types);
+        acctTypes = getAccountType(acctTypes);
+        Integer i = 0;
+        for(String Ids : accountList){
+            Account acc = new Account(Id=Ids);
+            acc.Type = acctTypes[i];
+            i++;
+            acct.add(acc);
+        }
+        update(acct);
+    }
+    
+    public List<String> getAccountType(List<String> types){
+        List<String> result = new List<String>();
+        for(String type : types){
+            if(type.equals('sort1')){
+                result.add(nivel1);
+            } else if(type.equals('sort2')){
+                result.add(nivel2);
+            } else if(type.equals('sort3')){
+                result.add(nivel3);
+            }
+        }
+        return result;
+    }
+    
+    public List<String> parseToList(String value) {
+        List<String> result = value.split(',');
+        return result;
+    }
+}
